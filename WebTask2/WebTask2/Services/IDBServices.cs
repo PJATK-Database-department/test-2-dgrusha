@@ -6,7 +6,9 @@ namespace WebTask2.Services
     public interface IDBServices
     {
 
-        public IEnumerable<OrderContainer> orders(int id);
+        public IEnumerable<OrderContainer> Orders(int id);
+
+        public void PutOrders(int id, IEnumerable<DTO.OrderDTO> orders);
 
     }
 }

@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace WebTask2.DTO
 {
     public class OrderContainer
     {
-        public int IdClientOrder { get; set; }
-        public DateTime OrderDate { get; set; }
-        public DateTime CompletionDate { get; set; }
+        [JsonProperty("IdClientOrder")] public int IdClientOrder { get; set; }
+        [JsonProperty("orderDate")] public DateTime OrderDate { get; set; }
+        [JsonProperty("completionDate")] public DateTime CompletionDate { get; set; }
 
-        public string Comments { get; set; }
+        [JsonProperty("comments")] public string Comments { get; set; }
 
-        public int IDClient { get; set; }
+        [JsonProperty("iDClient")] public int IDClient { get; set; }
 
-        public int IDEmployee { get; set; }
+        [JsonProperty("iDEmployee")] public int IDEmployee { get; set; }
 
-        public IEnumerable<OrderDTO> list { get; set; }
+        [JsonProperty("ordersDesc")] public IEnumerable<OrderDTO> list { get; set; }
 
-        public int TotalAmount { get; set; }
+        [JsonProperty("productName")] public int TotalAmount { get; set; }
     }
 }

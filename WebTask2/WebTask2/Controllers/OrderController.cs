@@ -19,10 +19,17 @@ namespace WebTask2.Controllers
         [HttpGet("{idClient:int}")]
         public  IActionResult GetAllOrdersById(int idClient)
         {
-            var orders =  _dBServices.orders(idClient);
+            var orders =  _dBServices.Orders(idClient);
             return Ok(orders);
         }
 
+
+        [HttpPut("{idOrder:int}")]
+        public IActionResult GetAllOrdersById(int idOrder, IEnumerable<DTO.OrderDTO> orders)
+        {
+            _dBServices.PutOrders(idOrder, orders);
+            return Ok();
+        }
 
     }
 }

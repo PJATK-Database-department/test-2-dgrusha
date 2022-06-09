@@ -17,7 +17,11 @@ namespace WebTask2.Services
 
         public IEnumerable<OrderContainer> OrderContainersGet(int id)
         {
-
+            int count = _db.Clients.Where(x=>x.IdClient == id).Count();
+            if (count == 0) 
+            {
+                throw new MiddleNotFound("user not found");
+            }
             IEnumerable<OrderContainer> oc = (from co in _db.ClientOrders
                                              where co.IDClient == id
                                              select new DTO.OrderContainer
@@ -58,7 +62,7 @@ namespace WebTask2.Services
             return totalAmount;
         }
 
-        public IEnumerable<OrderContainer> orders(int id)
+        public IEnumerable<OrderContainer> Orders(int id)
         {
             IEnumerable<OrderContainer> orderContainers = FulfilWithOrders(id);
             foreach (var item in orderContainers)
@@ -69,6 +73,28 @@ namespace WebTask2.Services
             return orderContainers;
         }
 
-
+        public void PutOrders(int id, IEnumerable<OrderDTO> orders)
+        {
+            int counter = _db.ClientOrders.Where(x => x.IdClientOrder == id).Count();
+            if (counter == 0) 
+            {
+                throw new MiddleNotFound("such a order does not exist");
+            }
+            foreach (var item in orders) 
+            {
+                int idC = _db.Confectioneries.Where(x => x.Name == item.ProductName).Select(x=>x.IdConfectionery).FirstOrDefault();
+                if (idC == 0) 
+                {
+                    throw new MiddleNotFound("such a confectioneries does not exist");
+                }
+                counter = _db.Confectionary_ClientOrders.Where(x => x.IdConfectionary == idC && x.IdClientOrder == id).Count();
+                if (counter != 0)
+                {
+                    throw new MiddleBadReq("such a record already exist");
+                }
+                _db.Confectionary_ClientOrders.Add(new Confectionary_ClientOrder {IdClientOrder = id, IdConfectionary= idC, Amount = item.Amount, Comments= ""});
+            }
+            _db.SaveChanges();
+        }
     }
 }

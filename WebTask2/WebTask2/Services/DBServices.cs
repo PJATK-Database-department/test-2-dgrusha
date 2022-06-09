@@ -76,10 +76,16 @@ namespace WebTask2.Services
         public void PutOrders(int id, IEnumerable<OrderDTO> orders)
         {
             int counter = _db.ClientOrders.Where(x => x.IdClientOrder == id).Count();
-            if (counter == 0) 
+            if (counter == 0)
             {
                 throw new MiddleNotFound("such a order does not exist");
             }
+            DateTime? dateTime = _db.ClientOrders.Where(x => x.IdClientOrder == id).Select(x => x.CompletionDate).FirstOrDefault();
+            if (dateTime != null)
+            {
+                throw new MiddleBadReq("The order was already competed");
+            }
+
             foreach (var item in orders) 
             {
                 int idC = _db.Confectioneries.Where(x => x.Name == item.ProductName).Select(x=>x.IdConfectionery).FirstOrDefault();
